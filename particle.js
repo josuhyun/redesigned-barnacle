@@ -1,28 +1,51 @@
-function Particle(){
-  this.pos = createVector(width/2, height/2);
-  this.vel = createVector(0,0);
-  this.acc = createVector(0,0);
-  
-  this.applyForce = function(force){
-    this.acc.add(force); 
+// The Nature of Code
+// Daniel Shiffman
+// http://natureofcode.com
+
+// Simple Particle System
+
+// A simple Particle class
+
+class Particle {
+  constructor(x, y) {
+    this.position = createVector(x, y);
+    this.velocity = createVector(random(-1, 1), random(-1, 0));
+    this.acceleration = createVector(0, 0);
+    this.lifespan = 255.0;
+  }
+
+  run() {
+    this.update();
+    this.display();
+  }
+
+  applyForce(f) {
+    this.acceleration.add(f);
+  }
+
+  // Method to update position
+  update() {
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.lifespan -= 2;
+
+    this.velocity.limit(5);
+  }
+
+  // Method to display
+  display() {
+    stroke(255, this.lifespan);
+    strokeWeight(2);
+    fill(255, this.lifespan);
+    ellipse(this.position.x, this.position.y, 12, 12);
+  }
+
+  // Is the particle still useful?
+  isDead() {
+    if (this.lifespan < 0.0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
-
-this.update = function(){
-  this.vel.add(this.acc);
-  this.pos.add(this.vel);
-  this.acc.set(0,0);
-}
-
-this.display = function(){
-  fill(255);
-ellipse(this.pos.x, this.pos.y,48,48);
-}
-
-this.display = function(){
-  fill(255);
-  ellipse(this.pos.x, this.pos.y, 48,48);
-}
-}
-
-
