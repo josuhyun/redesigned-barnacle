@@ -1,32 +1,40 @@
-var particles[];
+// The Nature of Code
+// Daniel Shiffman
+// http://natureofcode.com
+
+let ps;
+let repeller;
+let systems = [];
+
 
 function setup() {
-  createCanvas(640,360);
-  for(var i = 0; i<10; i++){
-    particles[i] = new Particle(random(width),random(height),random(1,6));
-  let c = color(random(0,255),random(0,255),random(0,255));
-  fill(c);
-  noStroke();
-}
+  createCanvas(640, 360);
+  let text = createP("click to add particle systems");
+  text.position(10, 365);
 
-
-  
-
-function mousePressed(){
-  var p = new Particle(mouseX,mouseY,random(1,6));
-  particles.push(p);
+  ps = new ParticleSystem(createVector(width / 2, 50));
+  repeller = new Repeller(width / 2, height / 2);
 }
 
 function draw() {
   background(51);
-  var wind = createVector(0.5,0);
-  for(var i = 0; i<10;i++){
-  
-  var gravity = createVector(0,0.2*particles[i].mass);
-  particle.applyForce(gravity);
-  if(mouseIsPressed)
-  particles[i].applyForce(wind);
+  ps.addParticle(mouseX, mouseY);
+
+  // Apply gravity force to all Particles
+  let gravity = createVector(0, 0.02);
+  ps.applyForce(gravity);
+
+  ps.applyRepeller(repeller);
+
+  repeller.display();
+  ps.run();
+  for (let i = 0; i < systems.length; i++) {
+    systems[i].addParticle();
+    systems[i].run();
   }
-  particles[i].update();
-  particle[i].display();
+
+}
+
+function mousePressed() {
+  systems.push(new ParticleSystem(1, createVector(mouseX, mouseY)));
 }
